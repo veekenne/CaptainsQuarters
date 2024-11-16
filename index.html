@@ -90,6 +90,17 @@
                 const rect = canvas.getBoundingClientRect();
                 canvas.mouseX = event.clientX - rect.left;
                 canvas.mouseY = event.clientY - rect.top;
+                let hovering = false;
+                for (let zone of interactiveZones) {
+                    if (canvas.mouseX > zone.x1 && canvas.mouseX < zone.x2 && canvas.mouseY > zone.y1 && canvas.mouseY < zone.y2) {
+                        canvas.style.cursor = 'pointer';
+                        hovering = true;
+                        break;
+                    }
+                }
+                if (!hovering) {
+                    canvas.style.cursor = 'default';
+                }
             });
 
             setInterval(draw, 50); // Redraw every 50 milliseconds (20 FPS)
