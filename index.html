@@ -26,8 +26,17 @@
         margin: 5px;
         padding: 10px;
         font-size: 16px;
+        background-color: #f4a261;
+        color: #000;
+        border: 2px solid #e76f51;
+        font-family: 'Press Start 2P', cursive;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #e76f51;
       }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="buttonContainer">
@@ -89,15 +98,17 @@
           return;
         }
 
-        background('bg.jpg');
+        background(bgImage);
 
         // Display and move the player
         fill(0, 0, 255);
-        ellipse(player.x, player.y, 50, 50);
+        noStroke();
+        rectMode(CENTER);
+        rect(player.x, player.y, 50, 50); // Draw player as a pixelated square
 
         // Display the target
         fill(255, 0, 0);
-        ellipse(target.x, target.y, targetSize, targetSize);
+        rect(target.x, target.y, targetSize, targetSize); // Draw target as a pixelated square
 
         // Check for collision with target
         if (dist(player.x, player.y, target.x, target.y) < (50 + targetSize) / 2) {
@@ -109,6 +120,7 @@
         fill(0);
         textSize(32);
         textAlign(LEFT, TOP);
+        textFont('Press Start 2P');
         text('Score: ' + score, 10, 10);
 
         // Display coordinates
@@ -149,6 +161,7 @@
         fill(0);
         textSize(16);
         textAlign(LEFT, BOTTOM);
+        textFont('Press Start 2P');
         text('Mouse: (' + mouseX + ', ' + mouseY + ')', 10, height - 10);
       }
 
