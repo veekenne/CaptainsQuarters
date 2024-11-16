@@ -18,13 +18,15 @@
             let choices = [];
 
             const interactiveZones = [
-                { x1: 265, y1: 385, x2: 379, y2: 110, message: "You see a man staring at the clocks.", choices: ["Ask the man a question", "Ignore the man"] },
-                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly.", choices: ["Wind the clock", "Leave it alone"] }
+                { x1: 100, y1: 100, x2: 200, y2: 200, message: "You see a man staring at the clocks.", choices: ["Ask the man a question", "Ignore the man"] },
+                { x1: 400, y1: 100, x2: 500, y2: 200, message: "The clock ticks loudly.", choices: ["Wind the clock", "Leave it alone"] }
             ];
 
             const canvas = document.createElement('canvas');
             canvas.width = 1015;
             canvas.height = 437;
+            canvas.mouseX = 0;
+            canvas.mouseY = 0;
             document.getElementById('game-container').appendChild(canvas);
             const ctx = canvas.getContext('2d');
 
@@ -46,8 +48,8 @@
                 }
                 lastDrawTime = now;
 
-                drawInteractiveZones();
                 ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+                drawInteractiveZones();
                 displayCoordinates();
                 displayMessage();
                 displayScore();
@@ -65,7 +67,7 @@
                 ctx.fillStyle = '#FFFFFF';
                 ctx.font = '16px "Press Start 2P"';
                 ctx.textAlign = 'right';
-                ctx.fillText(`x: ${canvas.mouseX || 0}, y: ${canvas.mouseY || 0}`, canvas.width - 10, canvas.height - 10);
+                ctx.fillText(`x: ${canvas.mouseX}, y: ${canvas.mouseY}`, canvas.width - 10, canvas.height - 10);
             }
 
             function displayMessage() {
@@ -134,4 +136,3 @@
     <div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
-
