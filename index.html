@@ -4,37 +4,12 @@
     <meta charset="UTF-8">
     <title>Captain's_quarters</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #000;
-        }
-        canvas {
-            display: block;
-        }
-        p, button {
-            font-family: 'Press Start 2P', cursive;
-            color: #fff;
-            background-color: #000;
-        }
-        button {
-            border: 2px solid #fff;
-            padding: 10px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #444;
-        }
-    </style>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="game-container" style="position: relative;"></div>
-    <h1 style="font-family: 'Press Start 2P', cursive; color: #fff; background-color: #000; text-align: center; margin: 20px 0;">Captain's Quarters</h1>
+    <h1 id="game-title">Captain's Quarters</h1>
     <script>
         let bg;
         let message = "";
@@ -120,7 +95,7 @@
                 for (let i = 0; i < choices.length; i++) {
                     let button = document.createElement('button');
                     button.innerHTML = choices[i];
-                    button.style.margin = '5px';
+                    button.className = 'choice-button';
                     button.onclick = function() {
                         if (choices[i] === "Ask the man a question") {
                             message = "The man smiles and begins to tell a story about time.";
@@ -131,36 +106,6 @@
                         }
                         choices = [];
                         displayChoices();
-                    };
-                    choiceContainer.appendChild(button);
-                }
-            } else if (choices[i] === "Ignore the man") {
-                            message = "The man frowns and turns away.";
-                            score += 5;
-                        }
-                        choices = [];
-                        displayChoices();
-                    };
-                    choiceContainer.appendChild(button);
-                }
-            }
-
-            if (choices.length > 0) {
-                for (let i = 0; i < choices.length; i++) {
-                    let button = document.createElement('button');
-                    button.innerHTML = choices[i];
-                    button.style.margin = '5px';
-                    button.onclick = function() {
-                        if (choices[i] === "Ask the man a question") {
-                            message = "The man smiles and begins to tell a story about time.";
-                            score += 10;
-                        } else if (choices[i] === "Ignore the man") {
-                            message = "The man frowns and turns away.";
-                            score += 5;
-                        }
-                        choices = [];
-                        displayChoices();
-                    };
                     };
                     choiceContainer.appendChild(button);
                 }
@@ -177,3 +122,4 @@
     <div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
+
