@@ -42,8 +42,8 @@
     }
 
     function setup() {
-      let canvas = createCanvas(bg.width, bg.height);
-      canvas.position((windowWidth - bg.width) / 2, (windowHeight - bg.height) / 2);
+      let canvas = createCanvas(windowWidth, windowHeight);
+      canvas.position(0, 0);
       imageMode(CENTER);
 
       // Create buttons for choices
@@ -52,7 +52,10 @@
 
     function draw() {
       background(0);
-      image(bg, width / 2, height / 2);
+      let scaleFactor = Math.min(windowWidth / bg.width, windowHeight / bg.height);
+      let newWidth = bg.width * scaleFactor;
+      let newHeight = bg.height * scaleFactor;
+      image(bg, width / 2, height / 2, newWidth, newHeight);
 
       // Display coordinates
       displayCoordinates();
@@ -80,11 +83,7 @@
     }
 
     function windowResized() {
-      resizeCanvas(bg.width, bg.height);
-      let canvas = document.querySelector('canvas');
-      canvas.style.position = 'absolute';
-      canvas.style.left = (windowWidth - bg.width) / 2 + 'px';
-      canvas.style.top = (windowHeight - bg.height) / 2 + 'px';
+      resizeCanvas(windowWidth, windowHeight);
     }
 
     function displayCoordinates() {
@@ -95,9 +94,10 @@
     }
 
     function checkMouseOverZones() {
-      // Example zones
-      let zone1 = { x: 157, y: 262, width: 200, height: 500 };
-      let zone2 = { x: 300, y: 200, width: 50, height: 50 };
+      // Example zones (adjusted for scaling)
+      let scaleFactor = Math.min(windowWidth / bg.width, windowHeight / bg.height);
+      let zone1 = { x: 157 * scaleFactor, y: 262 * scaleFactor, width: 200 * scaleFactor, height: 500 * scaleFactor };
+      let zone2 = { x: 300 * scaleFactor, y: 200 * scaleFactor, width: 50 * scaleFactor, height: 50 * scaleFactor };
 
       let isOverZone = false;
 
@@ -120,9 +120,10 @@
     }
 
     function mousePressed() {
-      // Example zones
-      let zone1 = { x: 157, y: 262, width: 200, height: 500 };
-      let zone2 = { x: 300, y: 200, width: 50, height: 50 };
+      // Example zones (adjusted for scaling)
+      let scaleFactor = Math.min(windowWidth / bg.width, windowHeight / bg.height);
+      let zone1 = { x: 157 * scaleFactor, y: 262 * scaleFactor, width: 200 * scaleFactor, height: 500 * scaleFactor };
+      let zone2 = { x: 300 * scaleFactor, y: 200 * scaleFactor, width: 50 * scaleFactor, height: 50 * scaleFactor };
 
       // Check if mouse is clicked in zone1
       if (mouseX > zone1.x && mouseX < zone1.x + zone1.width && mouseY > zone1.y && mouseY < zone1.y + zone1.height) {
@@ -147,7 +148,7 @@
       // Create new buttons for choices
       for (let i = 0; i < choices.length; i++) {
         let button = createButton(choices[i]);
-        button.position((windowWidth / 2) - 100, (windowHeight / 2) + (bg.height / 2) - 70 + i * 50);
+        button.position((windowWidth / 2) - 100, (windowHeight / 2) + (height / 2) - 70 + i * 50);
         button.class('choice-button');
         button.mousePressed(() => handleChoice(i));
       }
