@@ -1,176 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Captain's Quarters</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <style>
-    body {
-      background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-    }
-    .choice-button {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 12px;
-      background-color: #f0f0f0;
-      border: 3px solid #000;
-      padding: 10px;
-      cursor: pointer;
-      box-shadow: 3px 3px #888;
-      transition: transform 0.1s;
-    }
-
-    .choice-button:hover {
-      transform: scale(1.05);
-    }
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Captain's_quarters</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-  <script>
-    let bg;
-    let message = "";
-    let choices = [];
-    let response = "";
+    <script>
+        let bg;
+        let message = "";
 
-    function preload() {
-      bg = loadImage('bg.png');
-    }
+        function preload() {
+            bg = loadImage('bg.png');
+        }
 
-    function setup() {
-      let canvas = createCanvas(windowWidth, windowHeight);
-      canvas.position(0, 0);
-      imageMode(CENTER);
+        function setup() {
+            let canvas = createCanvas(1025, 728);
+            canvas.parent(document.body);
+        }
 
-      // Create buttons for choices
-      createChoiceButtons();
-    }
+        function draw() {
+            background(bg);
+            displayCoordinates();
+            checkInteractiveZones();
+            displayMessage();
+        }
 
-    function draw() {
-      background(0);
-      let scaleFactor = Math.min(windowWidth / bg.width, windowHeight / bg.height);
-      let newWidth = bg.width * scaleFactor;
-      let newHeight = bg.height * scaleFactor;
-      image(bg, width / 2, height / 2, newWidth, newHeight);
+        function displayCoordinates() {
+            fill(255);
+            textSize(16);
+            textAlign(RIGHT, BOTTOM);
+            text(`x: ${mouseX}, y: ${mouseY}`, width - 10, height - 10);
+        }
 
-      // Display coordinates
-      displayCoordinates();
+        function checkInteractiveZones() {
+            // Define the coordinates for interactive objects
+            let interactiveZones = [
+                { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks." }, // Example zone 1
+                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly." }  // Example zone 2
+            ];
 
-      // Check for mouseover zones
-      checkMouseOverZones();
+            let hovering = false;
+            for (let zone of interactiveZones) {
+                if (mouseX > zone.x1 && mouseX < zone.x2 && mouseY > zone.y1 && mouseY < zone.y2) {
+                    cursor('pointer');
+                    hovering = true;
+                    break;
+                }
+            }
+            if (!hovering) {
+                cursor('default');
+            }
+        }
 
-      // Display message if any
-      if (message !== "") {
-        fill(255);
-        textSize(20);
-        textAlign(CENTER);
-        textFont('Press Start 2P');
-        text(message, width / 2, height - 100);
-      }
+        function mousePressed() {
+            // Define the coordinates for interactive objects
+            let interactiveZones = [
+                { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks." }, // Example zone 1
+                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly." }  // Example zone 2
+            ];
 
-      // Display response if any
-      if (response !== "") {
-        fill(255, 200, 0);
-        textSize(18);
-        textAlign(CENTER);
-        textFont('Press Start 2P');
-        text(response, width / 2, height - 150);
-      }
-    }
+            for (let zone of interactiveZones) {
+                if (mouseX > zone.x1 && mouseX < zone.x2 && mouseY > zone.y1 && mouseY < zone.y2) {
+                    message = zone.message;
+                    break;
+                }
+            }
+        }
 
-    function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-    }
-
-    function displayCoordinates() {
-      fill(255);
-      textSize(16);
-      textAlign(RIGHT);
-      text("X: " + mouseX + " Y: " + mouseY, width - 10, height - 10);
-    }
-
-    function checkMouseOverZones() {
-      // Example zones (adjusted for scaling)
-      let scaleFactor = Math.min(windowWidth / bg.width, windowHeight / bg.height);
-      let zone1 = { x: 490 * scaleFactor, y: 385 * scaleFactor, width: 50 * scaleFactor, height: 50 * scaleFactor };
-      let zone2 = { x: 568 * scaleFactor, y: 355 * scaleFactor, width: 25 * scaleFactor, height: 25 * scaleFactor };
-      let zone3 = { x: 683 * scaleFactor, y: 390 * scaleFactor, width: 25 * scaleFactor, height: 25 * scaleFactor };
-      let zone4 = { x: 765 * scaleFactor, y: 279 * scaleFactor, width: 25 * scaleFactor, height: 100 * scaleFactor };
-
-      let isOverZone = false;
-
-      // Check if mouse is over zone1
-      if (mouseX > zone1.x && mouseX < zone1.x + zone1.width && mouseY > zone1.y && mouseY < zone1.y + zone1.height) {
-        isOverZone = true;
-      }
-
-      // Check if mouse is over zone2
-      if (mouseX > zone2.x && mouseX < zone2.x + zone2.width && mouseY > zone2.y && mouseY < zone2.y + zone2.height) {
-        isOverZone = true;
-      }
-
-      // Change cursor to pointer if over any zone
-      if (isOverZone) {
-        cursor('pointer');
-      } else {
-        cursor('default');
-      }
-    }
-
-    function mousePressed() {
-      // Example zones (adjusted for scaling)
-      let zone1 = { x: 490 * scaleFactor, y: 385 * scaleFactor, width: 50 * scaleFactor, height: 50 * scaleFactor };
-      let zone2 = { x: 568 * scaleFactor, y: 355 * scaleFactor, width: 25 * scaleFactor, height: 25 * scaleFactor };
-      let zone3 = { x: 683 * scaleFactor, y: 390 * scaleFactor, width: 25 * scaleFactor, height: 25 * scaleFactor };
-      let zone4 = { x: 765 * scaleFactor, y: 279 * scaleFactor, width: 25 * scaleFactor, height: 100 * scaleFactor };
-
-      // Check if mouse is clicked in zone1
-      if (mouseX > zone1.x && mouseX < zone1.x + zone1.width && mouseY > zone1.y && mouseY < zone1.y + zone1.height) {
-        message = "The Captain awaits you.";
-        choices = ["Greet him", "Awkward finger guns", "Ask him why he bailed you out of jail."];
-        createChoiceButtons();
-      }
-
-      // Check if mouse is clicked in zone2
-      if (mouseX > zone2.x && mouseX < zone2.x + zone2.width && mouseY > zone2.y && mouseY < zone2.y + zone2.height) {
-        message = "The captain holds a trident.";
-        choices = ["Visit the Pokemon Twineline"];
-        createChoiceButtons();
-      }
-    }
-
-    function createChoiceButtons() {
-      // Remove existing buttons
-      let existingButtons = document.querySelectorAll('.choice-button');
-      existingButtons.forEach(button => button.remove());
-
-      // Create new buttons for choices
-      for (let i = 0; i < choices.length; i++) {
-        let button = createButton(choices[i]);
-        button.position((windowWidth / 2) - 100, (windowHeight / 2) + (height / 2) - 70 + i * 50);
-        button.class('choice-button');
-        button.mousePressed(() => handleChoice(i));
-      }
-    }
-
-    function handleChoice(index) {
-      if (choices[index] === "Visit the Pokemon Twineline") {
-        window.open('https://veekenne.github.io/poketimeline/', '_blank');
-      }
-      if (choices[index] === "View the Professor's ePortfolio") {
-        window.open('https://veekenne.github.io/home/', '_blank');
-      }
-      if (choices[index] === "Visit the Professor's AI Projects") {
-        window.open('https://veekenne.github.io/week13/', '_blank');
-      }
-      if (choices[index] === "Go to Hollow Reign on itch.io") {
-        window.open('https://veekenne.itch.io/hollow-reign', '_blank');
-      }
-    }
-  </script>
+        function displayMessage() {
+            if (message !== "") {
+                fill(255);
+                textSize(20);
+                textAlign(CENTER, CENTER);
+                text(message, width / 2, height - 50);
+            }
+        }
+    </script>
 </body>
 </html>
