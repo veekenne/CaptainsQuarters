@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body style="display: flex; flex-direction: column; align-items: center; height: 100vh; margin: 20px 0 0 0;">
-    <div id="game-container" style="position: relative; display: flex; justify-content: center; align-items: center;"></div>
-    <h1 id="game-title" style="position: absolute; top: 0; text-align: center; width: 100%; margin: 10px 0;">Captain's Quarters</h1>
+    <div id="game-container" style="position: relative; display: flex; justify-content: center; align-items: center; margin-top: 80px;"></div>
+    <h1 id="game-title" style="position: absolute; top: 20px; text-align: center; width: 100%; margin: 20px 0;">Captain's Quarters</h1>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let bg = new Image();
@@ -17,17 +17,35 @@
             let score = 0;
             let choices = [];
 
+            const interactiveZones = [
+                { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks.", choices: ["Ask the man a question", "Ignore the man"] },
+                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly.", choices: ["Wind the clock", "Leave it alone"] }
+            ];
+
             const canvas = document.createElement('canvas');
             canvas.width = 1015;
             canvas.height = 437;
             document.getElementById('game-container').appendChild(canvas);
             const ctx = canvas.getContext('2d');
 
+            const loadingMessage = "Loading...";
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '20px "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.fillText(loadingMessage, canvas.width / 2, canvas.height / 2);
+
             bg.onload = function() {
                 draw();
             };
 
+            let lastDrawTime = 0;
             function draw() {
+                const now = performance.now();
+                if (now - lastDrawTime < 50) { // Limit redraw frequency to 20 FPS
+                    return;
+                }
+                lastDrawTime = now;
+
                 drawInteractiveZones();
                 ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
                 displayCoordinates();
@@ -36,10 +54,6 @@
             }
 
             function drawInteractiveZones() {
-                const interactiveZones = [
-                    { x1: 100, y1: 200, x2: 200, y2: 300 },
-                    { x1: 400, y1: 500, x2: 500, y2: 600 }
-                ];
                 ctx.strokeStyle = 'green';
                 ctx.lineWidth = 2;
                 for (let zone of interactiveZones) {
@@ -74,15 +88,11 @@
                 const rect = canvas.getBoundingClientRect();
                 canvas.mouseX = event.clientX - rect.left;
                 canvas.mouseY = event.clientY - rect.top;
-                draw();
             });
 
-            canvas.addEventListener('click', function() {
-                const interactiveZones = [
-                    { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks.", choices: ["Ask the man a question", "Ignore the man"] },
-                    { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly.", choices: ["Wind the clock", "Leave it alone"] }
-                ];
+            setInterval(draw, 50); // Redraw every 50 milliseconds (20 FPS)
 
+            canvas.addEventListener('click', function() {
                 for (let zone of interactiveZones) {
                     if (canvas.mouseX > zone.x1 && canvas.mouseX < zone.x2 && canvas.mouseY > zone.y1 && canvas.mouseY < zone.y2) {
                         message = zone.message;
@@ -124,3 +134,4 @@
     <div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
+
