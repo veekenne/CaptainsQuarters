@@ -33,6 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+    <h1 style="font-family: 'Press Start 2P', cursive; color: #fff; background-color: #000; text-align: center; margin: 20px 0;">Captain's Quarters</h1>
     <script>
         let bg;
         let message = "";
@@ -120,10 +121,16 @@
                     button.innerHTML = choices[i];
                     button.style.margin = '5px';
                     button.onclick = function() {
-                        message = `You chose: ${choices[i]}`;
-                        score += i === 0 ? 10 : 5;
+                        if (choices[i] === "Ask the man a question") {
+                            message = "The man smiles and begins to tell a story about time.";
+                            score += 10;
+                        } else if (choices[i] === "Ignore the man") {
+                            message = "The man frowns and turns away.";
+                            score += 5;
+                        }
                         choices = [];
                         displayChoices();
+                    };
                     };
                     choiceContainer.appendChild(button);
                 }
