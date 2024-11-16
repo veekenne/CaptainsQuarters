@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple P5.js Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let player;
+      let target;
+      let score = 0;
+      let targetSize = 30;
+      let bgImage;
+
+      function preload() {
+        bgImage = loadImage('/mnt/data/bg.jpg');
+      }
+
+      function setup() {
+        createCanvas(988, 552).parent(document.body);
+        player = createVector(width / 2, height / 2);
+        target = createTarget();
+      }
+
+      function draw() {
+        background(bgImage);
+
+        // Display and move the player
+        fill(0, 0, 255);
+        ellipse(player.x, player.y, 50, 50);
+
+        // Display the target
+        fill(255, 0, 0);
+        ellipse(target.x, target.y, targetSize, targetSize);
+
+        // Check for collision with target
+        if (dist(player.x, player.y, target.x, target.y) < (50 + targetSize) / 2) {
+          target = createTarget();
+          score++;
+        }
+
+        // Display score
+        fill(0);
+        textSize(32);
+        textAlign(LEFT, TOP);
+        text('Score: ' + score, 10, 10);
+      }
+
+      function keyPressed() {
+        const stepSize = 20;
+        if (keyCode === UP_ARROW) {
+          player.y -= stepSize;
+        } else if (keyCode === DOWN_ARROW) {
+          player.y += stepSize;
+        } else if (keyCode === LEFT_ARROW) {
+          player.x -= stepSize;
+        } else if (keyCode === RIGHT_ARROW) {
+          player.x += stepSize;
+        }
+      }
+
+      function createTarget() {
+        let x = random(targetSize / 2, width - targetSize / 2);
+        let y = random(targetSize / 2, height - targetSize / 2);
+        return createVector(x, y);
+      }
+    </script>
+  </body>
+</html>
