@@ -71,12 +71,9 @@
             }
 
             function displayMessage() {
-                if (message !== "") {
-                    ctx.fillStyle = '#FFFFFF';
-                    ctx.font = '20px "Press Start 2P"';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(message, canvas.width / 2, canvas.height - 100);
-                }
+                const messageContainer = document.getElementById('message-container');
+                messageContainer.innerHTML = message !== "" ? `<p>${message}</p>` : '';
+            }
             }
 
             function displayScore() {
@@ -144,6 +141,8 @@
             }
         });
     </script>
+    <div id="message-container" style="text-align: center; margin-top: 20px; color: white;"></div>
     <div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
+
