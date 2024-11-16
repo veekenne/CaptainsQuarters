@@ -17,10 +17,20 @@
         canvas {
             display: block;
         }
+        #interactive-zones {
+            color: white;
+            font-size: 16px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <script>
+        <script>
         let bg;
         let message = "";
 
@@ -48,8 +58,8 @@
         function checkInteractiveZones() {
             let isHovering = false;
 
-            // Example of interactive zone 1 (adjust the coordinates based on actual object location)
-            if (mouseX > 50 && mouseX < 150 && mouseY > 100 && mouseY < 200) {
+            // Interactive zone 1
+            if (mouseX > 350 && mouseX < 450 && mouseY > 383 && mouseY < 483) {
                 cursor('pointer');
                 isHovering = true;
             }
@@ -67,8 +77,8 @@
         }
 
         function mousePressed() {
-            // Example of interactive zone 1 click action
-            if (mouseX > 50 && mouseX < 150 && mouseY > 100 && mouseY < 200) {
+            // Interactive zone 1 click action
+            if (mouseX > 350 && mouseX < 450 && mouseY > 383 && mouseY < 483) {
                 message = "You clicked on object 1!";
             }
             
