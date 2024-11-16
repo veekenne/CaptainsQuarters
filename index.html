@@ -41,12 +41,9 @@
             };
 
             let lastDrawTime = 0;
+
             function draw() {
-                const now = performance.now();
-                if (now - lastDrawTime < 50) { // Limit redraw frequency to 20 FPS
-                    return;
-                }
-                lastDrawTime = now;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
                 drawInteractiveZones();
@@ -103,7 +100,7 @@
                 }
             });
 
-            setInterval(draw, 50); // Redraw every 50 milliseconds (20 FPS)
+            requestAnimationFrame(draw); // Redraw every 50 milliseconds (20 FPS)
 
             canvas.addEventListener('click', function() {
                 for (let zone of interactiveZones) {
