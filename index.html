@@ -6,6 +6,12 @@
   <style>
     body {
       background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
     }
     .choice-button {
       font-family: 'Press Start 2P', cursive;
@@ -36,7 +42,8 @@
     }
 
     function setup() {
-      createCanvas(bg.width, bg.height);
+      let canvas = createCanvas(bg.width, bg.height);
+      canvas.position((windowWidth - bg.width) / 2, (windowHeight - bg.height) / 2);
       imageMode(CENTER);
 
       // Create buttons for choices
@@ -74,6 +81,10 @@
 
     function windowResized() {
       resizeCanvas(bg.width, bg.height);
+      let canvas = document.querySelector('canvas');
+      canvas.style.position = 'absolute';
+      canvas.style.left = (windowWidth - bg.width) / 2 + 'px';
+      canvas.style.top = (windowHeight - bg.height) / 2 + 'px';
     }
 
     function displayCoordinates() {
@@ -136,7 +147,7 @@
       // Create new buttons for choices
       for (let i = 0; i < choices.length; i++) {
         let button = createButton(choices[i]);
-        button.position(width / 2 - 100, height - 70 + i * 50);
+        button.position((windowWidth / 2) - 100, (windowHeight / 2) + (bg.height / 2) - 70 + i * 50);
         button.class('choice-button');
         button.mousePressed(() => handleChoice(i));
       }
