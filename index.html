@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple P5.js Game</title>
+    <title>Captain's Quarters</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <style>
       body {
@@ -13,29 +13,83 @@
         height: 100vh;
         margin: 0;
         background-color: #f0f0f0;
+        position: relative;
+      }
+      #buttonContainer {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
+      }
+      button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 16px;
       }
     </style>
   </head>
   <body>
+    <div id="buttonContainer">
+      <button id="action1">Action 1</button>
+      <button id="action2">Action 2</button>
+    </div>
     <script>
       let player;
       let target;
       let score = 0;
       let targetSize = 30;
       let bgImage;
+      let message = "";
+      let buttonContainer;
+      let interactedObjects = 0;
+      let totalObjects = 2;
+      let endingScreenDisplayed = false;
 
       function preload() {
-        bgImage = loadImage('bg.jpg');
+        bgImage = loadImage('/mnt/data/bg.jpg');
       }
 
       function setup() {
         createCanvas(988, 552).parent(document.body);
         player = createVector(width / 2, height / 2);
         target = createTarget();
+        buttonContainer = select('#buttonContainer');
+
+        select('#action1').mousePressed(() => {
+          if (message.includes('Captain')) {
+            score++;
+            message = 'You gained 1 point!';
+          } else if (message.includes('Trident')) {
+            score += 2;
+            message = 'You gained 2 points!';
+          }
+          buttonContainer.style('display', 'none');
+          checkAllObjectsInteracted();
+        });
+
+        select('#action2').mousePressed(() => {
+          if (message.includes('Captain')) {
+            message = 'Hello, Captain!';
+          } else if (message.includes('Trident')) {
+            message = 'Greetings, Trident!';
+          }
+          buttonContainer.style('display', 'none');
+          checkAllObjectsInteracted();
+        });
       }
 
       function draw() {
-        background(bgImage);
+        if (endingScreenDisplayed) {
+          background(0);
+          fill(255);
+          textSize(48);
+          textAlign(CENTER, CENTER);
+          text('Congratulations! You interacted with all objects!', width / 2, height / 2);
+          return;
+        }
+
+        background('bg.jpg');
 
         // Display and move the player
         fill(0, 0, 255);
@@ -56,6 +110,20 @@
         textSize(32);
         textAlign(LEFT, TOP);
         text('Score: ' + score, 10, 10);
+
+        // Display coordinates
+        displayCoordinates();
+
+        // Check for mouseover zones and change cursor
+        checkMouseoverZones();
+
+        // Display message if any
+        if (message !== "") {
+          fill(0);
+          textSize(24);
+          textAlign(CENTER, CENTER);
+          text(message, width / 2, height - 30);
+        }
       }
 
       function keyPressed() {
@@ -75,6 +143,63 @@
         let x = random(targetSize / 2, width - targetSize / 2);
         let y = random(targetSize / 2, height - targetSize / 2);
         return createVector(x, y);
+      }
+
+      function displayCoordinates() {
+        fill(0);
+        textSize(16);
+        textAlign(LEFT, BOTTOM);
+        text('Mouse: (' + mouseX + ', ' + mouseY + ')', 10, height - 10);
+      }
+
+      function checkMouseoverZones() {
+        // Define interactive zones (example coordinates)
+        let zone1 = { x1: 100, y1: 100, x2: 200, y2: 200 };
+        let zone2 = { x1: 400, y1: 300, x2: 500, y2: 400 };
+
+        // Check if mouse is over zone1
+        if (mouseX > zone1.x1 && mouseX < zone1.x2 && mouseY > zone1.y1 && mouseY < zone1.y2) {
+          cursor('pointer');
+        }
+        // Check if mouse is over zone2
+        else if (mouseX > zone2.x1 && mouseX < zone2.x2 && mouseY > zone2.y1 && mouseY < zone2.y2) {
+          cursor('pointer');
+        } else {
+          cursor('default');
+        }
+      }
+
+      function mousePressed() {
+        // Define interactive zones (example coordinates)
+        let zone1 = { x1: 100, y1: 100, x2: 200, y2: 200 };
+        let zone2 = { x1: 400, y1: 300, x2: 500, y2: 400 };
+
+        // Check if mouse is clicked within zone1
+        if (mouseX > zone1.x1 && mouseX < zone1.x2 && mouseY > zone1.y1 && mouseY < zone1.y2) {
+          message = 'Captain clicked!';
+          buttonContainer.style('display', 'block');
+          select('#action1').html('Gain 1 point');
+          select('#action2').html('Say Hello');
+          interactedObjects++;
+        }
+        // Check if mouse is clicked within zone2
+        else if (mouseX > zone2.x1 && mouseX < zone2.x2 && mouseY > zone2.y1 && mouseY < zone2.y2) {
+          message = 'Trident clicked!';
+          buttonContainer.style('display', 'block');
+          select('#action1').html('Gain 2 points');
+          select('#action2').html('Say Greetings');
+          interactedObjects++;
+        } else {
+          message = "";
+          buttonContainer.style('display', 'none');
+        }
+        checkAllObjectsInteracted();
+      }
+
+      function checkAllObjectsInteracted() {
+        if (interactedObjects >= totalObjects) {
+          endingScreenDisplayed = true;
+        }
       }
     </script>
   </body>
