@@ -55,8 +55,6 @@
             text(`X: ${mouseX}, Y: ${mouseY}`, 10, height - 10);
         }
 
-        function checkInteractiveZones() {
-            let isHovering = false;
 
             // Interactive zone 1
             if (mouseX > 350 && mouseX < 450 && mouseY > 383 && mouseY < 483) {
@@ -64,29 +62,36 @@
                 isHovering = true;
             }
             
-            // Example of interactive zone 2 (adjust the coordinates based on actual object location)
-            if (mouseX > 300 && mouseX < 400 && mouseY > 300 && mouseY < 400) {
+            // Interactive zone 2
+            if (mouseX > 452 && mouseX < 472 && mouseY > 358 && mouseY < 378) {
                 cursor('pointer');
                 isHovering = true;
             }
 
+           // Interactive zone 3
+            if (mouseX > 560 && mouseX < 585 && mouseY > 414 && mouseY < 439) {
+                cursor('pointer');
+                isHovering = true;
+            }
             // Reset cursor if not hovering over any interactive zones
             if (!isHovering) {
                 cursor('default');
             }
-        }
-
-        function mousePressed() {
             // Interactive zone 1 click action
             if (mouseX > 350 && mouseX < 450 && mouseY > 383 && mouseY < 483) {
                 message = "You clicked on object 1!";
             }
             
-            // Example of interactive zone 2 click action
-            if (mouseX > 300 && mouseX < 400 && mouseY > 300 && mouseY < 400) {
+            // Interactive zone 2 click action
+            if (mouseX > 452 && mouseX < 472 && mouseY > 358 && mouseY < 378) {
                 message = "You clicked on object 2!";
             }
-        }
+            
+              // Interactive zone 3 click action
+            if (mouseX > 560 && mouseX < 585 && mouseY > 414 && mouseY < 439) {
+                message = "You clicked on object 3!";
+            }
+        
 
         function displayMessage() {
             fill(255, 0, 0);
