@@ -22,6 +22,7 @@
 <body>
     <script>
         let bg;
+        let message = "";
 
         function preload() {
             bg = loadImage('bg.jpg');
@@ -35,6 +36,7 @@
             background(bg);
             displayCoordinates();
             checkInteractiveZones();
+            displayMessage();
         }
 
         function displayCoordinates() {
@@ -62,6 +64,24 @@
             if (!isHovering) {
                 cursor('default');
             }
+        }
+
+        function mousePressed() {
+            // Example of interactive zone 1 click action
+            if (mouseX > 50 && mouseX < 150 && mouseY > 100 && mouseY < 200) {
+                message = "You clicked on object 1!";
+            }
+            
+            // Example of interactive zone 2 click action
+            if (mouseX > 300 && mouseX < 400 && mouseY > 300 && mouseY < 400) {
+                message = "You clicked on object 2!";
+            }
+        }
+
+        function displayMessage() {
+            fill(255, 0, 0);
+            textSize(20);
+            text(message, 10, 30);
         }
     </script>
 </body>
