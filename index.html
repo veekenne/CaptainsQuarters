@@ -22,13 +22,15 @@
     <script>
         let bg;
         let message = "";
+        let score = 0;
+        let choices = [];
 
         function preload() {
             bg = loadImage('bg.png');
         }
 
         function setup() {
-            let canvas = createCanvas(1002, 432);
+            let canvas = createCanvas(1015, 437);
             canvas.parent(document.body);
         }
 
@@ -37,6 +39,8 @@
             displayCoordinates();
             checkInteractiveZones();
             displayMessage();
+            displayScore();
+            displayChoices();
         }
 
         function displayCoordinates() {
@@ -69,13 +73,14 @@
         function mousePressed() {
             // Define the coordinates for interactive objects
             let interactiveZones = [
-                { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks." }, // Example zone 1
-                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly." }  // Example zone 2
+                { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks.", choices: ["Ask the man a question", "Ignore the man"] }, // Example zone 1
+                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly.", choices: ["Wind the clock", "Leave it alone"] }  // Example zone 2
             ];
 
             for (let zone of interactiveZones) {
                 if (mouseX > zone.x1 && mouseX < zone.x2 && mouseY > zone.y1 && mouseY < zone.y2) {
                     message = zone.message;
+                    choices = zone.choices;
                     break;
                 }
             }
@@ -86,9 +91,44 @@
                 fill(255);
                 textSize(20);
                 textAlign(CENTER, CENTER);
-                text(message, width / 2, height - 50);
+                text(message, width / 2, height - 100);
             }
         }
+
+        function displayChoices() {
+            if (choices.length > 0) {
+                fill(200);
+                textSize(16);
+                textAlign(CENTER, CENTER);
+                for (let i = 0; i < choices.length; i++) {
+                    text(choices[i], width / 2, height - 70 + (i * 20));
+                }
+            }
+        }
+
+        function keyPressed() {
+            if (choices.length > 0) {
+                if (key === '1' && choices[0]) {
+                    message = `You chose: ${choices[0]}`;
+                    score += 10;
+                    choices = [];
+                } else if (key === '2' && choices[1]) {
+                    message = `You chose: ${choices[1]}`;
+                    score += 5;
+                    choices = [];
+                }
+            }
+        }
+
+        function displayScore() {
+            fill(255);
+            textSize(16);
+            textAlign(LEFT, TOP);
+            text(`Score: ${score}`, 10, 10);
+        }
     </script>
+    <div style="width: 1015px; height: 100px; overflow-y: scroll; margin-top: 10px; background-color: #222; color: #fff; padding: 10px; box-sizing: border-box;">
+        <p>This is Captain's Quarters, an interactive game where you explore the mysterious room full of clocks and curiosities. Click on objects to interact with them and make choices that affect the game. Your score will change based on your actions. Use the mouse to hover over objects, and click to see what happens next!</p>
+    </div>
 </body>
 </html>
