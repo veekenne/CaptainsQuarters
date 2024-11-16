@@ -4,6 +4,9 @@
   <title>Captain's Quarters</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <style>
+    body {
+      background-color: black;
+    }
     .choice-button {
       font-family: 'Press Start 2P', cursive;
       font-size: 12px;
@@ -43,8 +46,6 @@
     function draw() {
       background(0);
       image(bg, width / 2, height / 2);
-
-      
 
       // Display coordinates
       displayCoordinates();
