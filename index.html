@@ -1,219 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Captain's Quarters</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page P5.js Game</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <style>
-      body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f0f0f0;
-        position: relative;
-      }
-      #buttonContainer {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: none;
-      }
-      button {
-        margin: 5px;
-        padding: 10px;
-        font-size: 16px;
-        background-color: #f4a261;
-        color: #000;
-        border: 2px solid #e76f51;
-        font-family: 'Press Start 2P', cursive;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #e76f51;
-      }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="buttonContainer">
-      <button id="action1">Action 1</button>
-      <button id="action2">Action 2</button>
-    </div>
+</head>
+<body>
     <script>
-      let player;
-      let target;
-      let score = 0;
-      let targetSize = 30;
-      let bgImage;
-      let message = "";
-      let buttonContainer;
-      let interactedObjects = 0;
-      let totalObjects = 2;
-      let endingScreenDisplayed = false;
+        let bg;
 
-      function preload() {
-        bgImage = loadImage('bg.jpg');
-      }
-
-      function setup() {
-        createCanvas(988, 552).parent(document.body);
-        player = createVector(width / 2, height / 2);
-        target = createTarget();
-        buttonContainer = select('#buttonContainer');
-
-        select('#action1').mousePressed(() => {
-          if (message.includes('Captain')) {
-            score++;
-            message = 'You gained 1 point!';
-          } else if (message.includes('Trident')) {
-            score += 2;
-            message = 'You gained 2 points!';
-          }
-          buttonContainer.style('display', 'none');
-          checkAllObjectsInteracted();
-        });
-
-        select('#action2').mousePressed(() => {
-          if (message.includes('Captain')) {
-            message = 'Hello, Captain!';
-          } else if (message.includes('Trident')) {
-            message = 'Greetings, Trident!';
-          }
-          buttonContainer.style('display', 'none');
-          checkAllObjectsInteracted();
-        });
-      }
-
-      function draw() {
-        if (endingScreenDisplayed) {
-          background(0);
-          fill(255);
-          textSize(48);
-          textAlign(CENTER, CENTER);
-          text('Congratulations! You interacted with all objects!', width / 2, height / 2);
-          return;
+        function preload() {
+            bg = loadImage('bg.jpg');
         }
 
-        background(bgImage);
-
-        // Display and move the player
-        fill(0, 0, 255);
-        noStroke();
-        rectMode(CENTER);
-        rect(player.x, player.y, 50, 50); // Draw player as a pixelated square
-
-        // Display the target
-        fill(255, 0, 0);
-        rect(target.x, target.y, targetSize, targetSize); // Draw target as a pixelated square
-
-        // Check for collision with target
-        if (dist(player.x, player.y, target.x, target.y) < (50 + targetSize) / 2) {
-          target = createTarget();
-          score++;
+        function setup() {
+            createCanvas(bg.width, bg.height);
         }
 
-        // Display score
-        fill(0);
-        textSize(32);
-        textAlign(LEFT, TOP);
-        textFont('Press Start 2P');
-        text('Score: ' + score, 10, 10);
-
-        // Display coordinates
-        displayCoordinates();
-
-        // Check for mouseover zones and change cursor
-        checkMouseoverZones();
-
-        // Display message if any
-        if (message !== "") {
-          fill(0);
-          textSize(24);
-          textAlign(CENTER, CENTER);
-          text(message, width / 2, height - 30);
+        function draw() {
+            background(bg);
+            displayCoordinates();
+            checkInteractiveZones();
         }
-      }
 
-      function keyPressed() {
-        const stepSize = 20;
-        if (keyCode === UP_ARROW) {
-          player.y -= stepSize;
-        } else if (keyCode === DOWN_ARROW) {
-          player.y += stepSize;
-        } else if (keyCode === LEFT_ARROW) {
-          player.x -= stepSize;
-        } else if (keyCode === RIGHT_ARROW) {
-          player.x += stepSize;
+        function displayCoordinates() {
+            fill(255);
+            textSize(16);
+            text(`X: ${mouseX}, Y: ${mouseY}`, 10, height - 10);
         }
-      }
 
-      function createTarget() {
-        let x = random(targetSize / 2, width - targetSize / 2);
-        let y = random(targetSize / 2, height - targetSize / 2);
-        return createVector(x, y);
-      }
+        function checkInteractiveZones() {
+            let isHovering = false;
 
-      function displayCoordinates() {
-        fill(0);
-        textSize(16);
-        textAlign(LEFT, BOTTOM);
-        textFont('Press Start 2P');
-        text('Mouse: (' + mouseX + ', ' + mouseY + ')', 10, height - 10);
-      }
+            // Example of interactive zone 1 (adjust the coordinates based on actual object location)
+            if (mouseX > 50 && mouseX < 150 && mouseY > 100 && mouseY < 200) {
+                cursor('pointer');
+                isHovering = true;
+            }
+            
+            // Example of interactive zone 2 (adjust the coordinates based on actual object location)
+            if (mouseX > 300 && mouseX < 400 && mouseY > 300 && mouseY < 400) {
+                cursor('pointer');
+                isHovering = true;
+            }
 
-      function checkMouseoverZones() {
-        // Define interactive zones (example coordinates)
-        let zone1 = { x1: 100, y1: 100, x2: 200, y2: 200 };
-        let zone2 = { x1: 400, y1: 300, x2: 500, y2: 400 };
-
-        // Check if mouse is over zone1
-        if (mouseX > zone1.x1 && mouseX < zone1.x2 && mouseY > zone1.y1 && mouseY < zone1.y2) {
-          cursor('pointer');
+            // Reset cursor if not hovering over any interactive zones
+            if (!isHovering) {
+                cursor('default');
+            }
         }
-        // Check if mouse is over zone2
-        else if (mouseX > zone2.x1 && mouseX < zone2.x2 && mouseY > zone2.y1 && mouseY < zone2.y2) {
-          cursor('pointer');
-        } else {
-          cursor('default');
-        }
-      }
-
-      function mousePressed() {
-        // Define interactive zones (example coordinates)
-        let zone1 = { x1: 100, y1: 100, x2: 200, y2: 200 };
-        let zone2 = { x1: 400, y1: 300, x2: 500, y2: 400 };
-
-        // Check if mouse is clicked within zone1
-        if (mouseX > zone1.x1 && mouseX < zone1.x2 && mouseY > zone1.y1 && mouseY < zone1.y2) {
-          message = 'Captain clicked!';
-          buttonContainer.style('display', 'block');
-          select('#action1').html('Gain 1 point');
-          select('#action2').html('Say Hello');
-          interactedObjects++;
-        }
-        // Check if mouse is clicked within zone2
-        else if (mouseX > zone2.x1 && mouseX < zone2.x2 && mouseY > zone2.y1 && mouseY < zone2.y2) {
-          message = 'Trident clicked!';
-          buttonContainer.style('display', 'block');
-          select('#action1').html('Gain 2 points');
-          select('#action2').html('Say Greetings');
-          interactedObjects++;
-        } else {
-          message = "";
-          buttonContainer.style('display', 'none');
-        }
-        checkAllObjectsInteracted();
-      }
-
-      function checkAllObjectsInteracted() {
-        if (interactedObjects >= totalObjects) {
-          endingScreenDisplayed = true;
-        }
-      }
     </script>
-  </body>
+</body>
 </html>
