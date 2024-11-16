@@ -13,6 +13,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             let bg = new Image();
             bg.src = 'bg.png';
+            bg.onerror = function() {
+                console.error('Background image failed to load. Please check the file path.');
+            };
             let message = "";
             let score = 0;
             let choices = [];
@@ -76,6 +79,8 @@
                 }
             }
             }
+            }
+
             function displayScore() {
                 ctx.fillStyle = '#FFFFFF';
                 ctx.font = '16px "Press Start 2P"';
@@ -100,7 +105,11 @@
                 }
             });
 
-            requestAnimationFrame(draw); // Redraw every 50 milliseconds (20 FPS)
+            function gameLoop() {
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+            requestAnimationFrame(gameLoop);
 
             canvas.addEventListener('click', function() {
                 for (let zone of interactiveZones) {
