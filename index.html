@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Captain's_quarters</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -11,115 +10,104 @@
     <div id="game-container" style="position: relative;"></div>
     <h1 id="game-title">Captain's Quarters</h1>
     <script>
-        let bg;
-        let message = "";
-        let score = 0;
-        let choices = [];
+        document.addEventListener('DOMContentLoaded', function() {
+            let bg = new Image();
+            bg.src = 'bg.png';
+            let message = "";
+            let score = 0;
+            let choices = [];
 
-        function preload() {
-            bg = loadImage('bg.png');
-        }
+            const canvas = document.createElement('canvas');
+            canvas.width = 1015;
+            canvas.height = 437;
+            document.getElementById('game-container').appendChild(canvas);
+            const ctx = canvas.getContext('2d');
 
-        function setup() {
-            let canvas = createCanvas(1015, 437);
-            canvas.parent('game-container');
-        }
+            bg.onload = function() {
+                draw();
+            };
 
-        function draw() {
-            background(bg);
-            displayCoordinates();
-            checkInteractiveZones();
-            displayMessage();
-            displayScore();
-        }
+            function draw() {
+                ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+                displayCoordinates();
+                displayMessage();
+                displayScore();
+            }
 
-        function displayCoordinates() {
-            fill(255);
-            textSize(16);
-            textAlign(RIGHT, BOTTOM);
-            text(`x: ${mouseX}, y: ${mouseY}`, width - 10, height - 10);
-        }
+            function displayCoordinates() {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '16px "Press Start 2P"';
+                ctx.textAlign = 'right';
+                ctx.fillText(`x: ${canvas.mouseX || 0}, y: ${canvas.mouseY || 0}`, canvas.width - 10, canvas.height - 10);
+            }
 
-        function checkInteractiveZones() {
-            // Define the coordinates for interactive objects
-            let interactiveZones = [
-                { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks." }, // Example zone 1
-                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly." }  // Example zone 2
-            ];
-
-            let hovering = false;
-            for (let zone of interactiveZones) {
-                if (mouseX > zone.x1 && mouseX < zone.x2 && mouseY > zone.y1 && mouseY < zone.y2) {
-                    cursor('pointer');
-                    hovering = true;
-                    break;
+            function displayMessage() {
+                if (message !== "") {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.font = '20px "Press Start 2P"';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(message, canvas.width / 2, canvas.height - 100);
                 }
             }
-            if (!hovering) {
-                cursor('default');
+
+            function displayScore() {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '16px "Press Start 2P"';
+                ctx.textAlign = 'left';
+                ctx.fillText(`Score: ${score}`, 10, 20);
             }
-        }
 
-        function mousePressed() {
-            // Define the coordinates for interactive objects
-            let interactiveZones = [
-                { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks.", choices: ["Ask the man a question", "Ignore the man"] }, // Example zone 1
-                { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly.", choices: ["Wind the clock", "Leave it alone"] }  // Example zone 2
-            ];
+            canvas.addEventListener('mousemove', function(event) {
+                const rect = canvas.getBoundingClientRect();
+                canvas.mouseX = event.clientX - rect.left;
+                canvas.mouseY = event.clientY - rect.top;
+                draw();
+            });
 
-            for (let zone of interactiveZones) {
-                if (mouseX > zone.x1 && mouseX < zone.x2 && mouseY > zone.y1 && mouseY < zone.y2) {
-                    message = zone.message;
-                    choices = zone.choices;
-                    break;
+            canvas.addEventListener('click', function() {
+                const interactiveZones = [
+                    { x1: 100, y1: 200, x2: 200, y2: 300, message: "You see a man staring at the clocks.", choices: ["Ask the man a question", "Ignore the man"] },
+                    { x1: 400, y1: 500, x2: 500, y2: 600, message: "The clock ticks loudly.", choices: ["Wind the clock", "Leave it alone"] }
+                ];
+
+                for (let zone of interactiveZones) {
+                    if (canvas.mouseX > zone.x1 && canvas.mouseX < zone.x2 && canvas.mouseY > zone.y1 && canvas.mouseY < zone.y2) {
+                        message = zone.message;
+                        choices = zone.choices;
+                        break;
+                    }
+                }
+                displayChoices();
+                draw();
+            });
+
+            function displayChoices() {
+                const choiceContainer = document.getElementById('choice-container');
+                choiceContainer.innerHTML = '';
+
+                if (choices.length > 0) {
+                    for (let i = 0; i < choices.length; i++) {
+                        let button = document.createElement('button');
+                        button.innerHTML = choices[i];
+                        button.className = 'choice-button';
+                        button.onclick = function() {
+                            if (choices[i] === "Ask the man a question") {
+                                message = "The man smiles and begins to tell a story about time.";
+                                score += 10;
+                            } else if (choices[i] === "Ignore the man") {
+                                message = "The man frowns and turns away.";
+                                score += 5;
+                            }
+                            choices = [];
+                            displayChoices();
+                            draw();
+                        };
+                        choiceContainer.appendChild(button);
+                    }
                 }
             }
-            displayChoices();
-        }
-
-        function displayMessage() {
-            if (message !== "") {
-                fill(255);
-                textSize(20);
-                textAlign(CENTER, CENTER);
-                textFont('Press Start 2P');
-                text(message, width / 2, height - 100);
-            }
-        }
-
-        function displayChoices() {
-            const choiceContainer = document.getElementById('choice-container');
-            choiceContainer.innerHTML = '';
-
-            if (choices.length > 0) {
-                for (let i = 0; i < choices.length; i++) {
-                    let button = document.createElement('button');
-                    button.innerHTML = choices[i];
-                    button.className = 'choice-button';
-                    button.onclick = function() {
-                        if (choices[i] === "Ask the man a question") {
-                            message = "The man smiles and begins to tell a story about time.";
-                            score += 10;
-                        } else if (choices[i] === "Ignore the man") {
-                            message = "The man frowns and turns away.";
-                            score += 5;
-                        }
-                        choices = [];
-                        displayChoices();
-                    };
-                    choiceContainer.appendChild(button);
-                }
-            }
-        }
-
-        function displayScore() {
-            fill(255);
-            textSize(16);
-            textAlign(LEFT, TOP);
-            text(`Score: ${score}`, 10, 10);
-        }
+        });
     </script>
     <div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
-
