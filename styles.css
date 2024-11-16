@@ -35,6 +35,12 @@ button:hover {
     margin: 20px 0;
 }
 
+.highlighted-text {
+    background-color: black;
+    color: white;
+    padding: 2px 4px;
+}
+
 .choice-button {
     margin: 5px;
     border: 2px solid #fff;
