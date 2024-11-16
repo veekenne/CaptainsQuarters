@@ -97,7 +97,9 @@
       // Example zones (adjusted for scaling)
       let scaleFactor = Math.min(windowWidth / bg.width, windowHeight / bg.height);
       let zone1 = { x: 157 * scaleFactor, y: 262 * scaleFactor, width: 200 * scaleFactor, height: 500 * scaleFactor };
-      let zone2 = { x: 300 * scaleFactor, y: 200 * scaleFactor, width: 50 * scaleFactor, height: 50 * scaleFactor };
+      let zone2 = { x: 568 * scaleFactor, y: 355 * scaleFactor, width: 25 * scaleFactor, height: 25 * scaleFactor };
+      let zone3 = { x: 683 * scaleFactor, y: 390 * scaleFactor, width: 25 * scaleFactor, height: 25 * scaleFactor };
+      let zone4 = { x: 765 * scaleFactor, y: 279 * scaleFactor, width: 25 * scaleFactor, height: 100 * scaleFactor };
 
       let isOverZone = false;
 
@@ -127,14 +129,14 @@
 
       // Check if mouse is clicked in zone1
       if (mouseX > zone1.x && mouseX < zone1.x + zone1.width && mouseY > zone1.y && mouseY < zone1.y + zone1.height) {
-        message = "PROFESSOR KENNEDY waves from a distance.";
-        choices = ["View the Professor's ePortfolio", "Go to Hollow Reign on itch.io", "Visit the Professor's AI Projects"];
+        message = "The Captain awaits you.";
+        choices = ["Greet him", "Awkward finger guns", "Ask him why he bailed you out of jail."];
         createChoiceButtons();
       }
 
       // Check if mouse is clicked in zone2
       if (mouseX > zone2.x && mouseX < zone2.x + zone2.width && mouseY > zone2.y && mouseY < zone2.y + zone2.height) {
-        message = "The POKEBALL twitches. Something is inside.";
+        message = "The captain holds a trident.";
         choices = ["Visit the Pokemon Twineline"];
         createChoiceButtons();
       }
