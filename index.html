@@ -96,13 +96,23 @@
         }
 
         function displayChoices() {
-            if (choices.length > 0) {
-                fill(200);
-                textSize(16);
-                textAlign(CENTER, CENTER);
-                for (let i = 0; i < choices.length; i++) {
-                    text(choices[i], width / 2, height - 70 + (i * 20));
-                }
+    const choiceContainer = document.getElementById('choice-container');
+    choiceContainer.innerHTML = '';
+
+    if (choices.length > 0) {
+        for (let i = 0; i < choices.length; i++) {
+            let button = document.createElement('button');
+            button.innerHTML = choices[i];
+            button.style.margin = '5px';
+            button.onclick = function() {
+                message = `You chose: ${choices[i]}`;
+                score += i === 0 ? 10 : 5;
+                choices = [];
+            };
+            choiceContainer.appendChild(button);
+        }
+    }
+}
             }
         }
 
@@ -131,5 +141,6 @@
   <div style="width: 1015px; height: 100px; overflow-y: scroll; margin-top: 20px; background-color: #222; color: #fff; padding: 10px; box-sizing: border-box;">
         <p>This is Captain's Quarters, an interactive game where you explore the mysterious room full of clocks and curiosities. Click on objects to interact with them and make choices that affect the game. Your score will change based on your actions. Use the mouse to hover over objects, and click to see what happens next!</p>
     </div>
+<div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
