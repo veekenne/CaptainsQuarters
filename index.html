@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 20px 0 0 0;">
     <div id="game-container" style="position: relative; display: flex; justify-content: center; align-items: center;"></div>
     <h1 id="game-title">Captain's Quarters</h1>
     <script>
@@ -28,10 +28,23 @@
             };
 
             function draw() {
+                drawInteractiveZones();
                 ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
                 displayCoordinates();
                 displayMessage();
                 displayScore();
+            }
+
+            function drawInteractiveZones() {
+                const interactiveZones = [
+                    { x1: 100, y1: 200, x2: 200, y2: 300 },
+                    { x1: 400, y1: 500, x2: 500, y2: 600 }
+                ];
+                ctx.strokeStyle = 'green';
+                ctx.lineWidth = 2;
+                for (let zone of interactiveZones) {
+                    ctx.strokeRect(zone.x1, zone.y1, zone.x2 - zone.x1, zone.y2 - zone.y1);
+                }
             }
 
             function displayCoordinates() {
@@ -111,4 +124,3 @@
     <div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
-
