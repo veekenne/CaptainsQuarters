@@ -33,6 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="game-container" style="position: relative;"></div>
     <h1 style="font-family: 'Press Start 2P', cursive; color: #fff; background-color: #000; text-align: center; margin: 20px 0;">Captain's Quarters</h1>
     <script>
         let bg;
@@ -46,7 +47,7 @@
 
         function setup() {
             let canvas = createCanvas(1015, 437);
-            canvas.parent(document.body);
+            canvas.parent('game-container');
         }
 
         function draw() {
@@ -133,6 +134,15 @@
                     };
                     choiceContainer.appendChild(button);
                 }
+            } else if (choices[i] === "Ignore the man") {
+                            message = "The man frowns and turns away.";
+                            score += 5;
+                        }
+                        choices = [];
+                        displayChoices();
+                    };
+                    choiceContainer.appendChild(button);
+                }
             }
 
             if (choices.length > 0) {
@@ -164,8 +174,6 @@
             text(`Score: ${score}`, 10, 10);
         }
     </script>
-    <br><br><br> 
-    
     <div id="choice-container" style="text-align: center; margin-top: 20px;"></div>
 </body>
 </html>
