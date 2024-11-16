@@ -131,6 +131,26 @@
                         choices = [];
                         displayChoices();
                     };
+                    choiceContainer.appendChild(button);
+                }
+            }
+
+            if (choices.length > 0) {
+                for (let i = 0; i < choices.length; i++) {
+                    let button = document.createElement('button');
+                    button.innerHTML = choices[i];
+                    button.style.margin = '5px';
+                    button.onclick = function() {
+                        if (choices[i] === "Ask the man a question") {
+                            message = "The man smiles and begins to tell a story about time.";
+                            score += 10;
+                        } else if (choices[i] === "Ignore the man") {
+                            message = "The man frowns and turns away.";
+                            score += 5;
+                        }
+                        choices = [];
+                        displayChoices();
+                    };
                     };
                     choiceContainer.appendChild(button);
                 }
